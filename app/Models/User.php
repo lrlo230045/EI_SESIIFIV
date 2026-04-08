@@ -18,11 +18,19 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+    'name',
+    'email',
+    'password',
+    'role',
+    'active',
+    'provider',
+    'provider_id'
     ];
 
+    public function talleres()
+{
+    return $this->belongsToMany(\App\Models\Taller::class, 'inscripciones');
+}
     /**
      * The attributes that should be hidden for serialization.
      *

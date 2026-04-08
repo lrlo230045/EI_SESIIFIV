@@ -34,21 +34,25 @@ class AuthController extends Controller
 
     // REGISTER
     public function register(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6|confirmed'
-        ]);
+{
+    $request->validate([
+        'name' => 'required',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|confirmed|min:6',
+    ]);
 
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password)
-        ]);
+    User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
 
-        return back()->with('success', 'Usuario registrado correctamente');
-    }
+        // IMPORTANTE
+        'role' => 'user',
+        'active' => true
+    ]);
+
+    return redirect()->back()->with('success', 'Registro exitoso');
+}
 
     public function logout(Request $request)
     {

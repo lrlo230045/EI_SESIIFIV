@@ -1,16 +1,30 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Dashboard</title>
-</head>
-<body>
+@extends('layouts.app')
 
-<h1>Bienvenido {{ auth()->user()->name }}</h1>
+@section('content')
 
-<form method="POST" action="{{ route('logout') }}">
-    @csrf
-    <button type="submit">Cerrar sesión</button>
-</form>
+<h2>Bienvenido {{ auth()->user()->name }}</h2>
 
-</body>
-</html>
+<hr>
+
+<div class="mt-4">
+
+    <a href="/talleres-disponibles" class="btn btn-success">
+        Ver Talleres
+    </a>
+
+    <a href="/mis-talleres" class="btn btn-primary">
+        Mis Talleres
+    </a>
+
+    @if(auth()->user()->role == 'admin')
+        <hr>
+
+        <h4>Panel Admin</h4>
+
+        <a href="/users" class="btn btn-dark">Usuarios</a>
+        <a href="/talleres" class="btn btn-dark">Talleres</a>
+    @endif
+
+</div>
+
+@endsection

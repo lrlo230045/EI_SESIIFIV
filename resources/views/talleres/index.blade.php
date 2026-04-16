@@ -7,10 +7,7 @@
         <a href="{{ route('talleres.create') }}" class="btn btn-primary">+ Crear Taller</a>
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
+  
     <div class="card shadow">
         <div class="card-body">
 

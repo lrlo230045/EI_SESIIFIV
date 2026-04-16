@@ -30,8 +30,33 @@
 
 <!-- CONTENIDO -->
 <div class="container mt-4">
+
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show mt-2">
+            {{ session('success') }}
+            <button class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show mt-2">
+            {{ session('error') }}
+            <button class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    @if(session('warning'))
+        <div class="alert alert-warning alert-dismissible fade show mt-2">
+            {{ session('warning') }}
+            <button class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
     @yield('content')
+
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

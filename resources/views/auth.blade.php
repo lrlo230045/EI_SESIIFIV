@@ -209,10 +209,12 @@
         </div>
 
         <div class="social">
-            <div><i class="fa-brands fa-google"></i></div>
-            <div><i class="fa-brands fa-facebook"></i></div>
-            <div><i class="fa-brands fa-twitter"></i></div>
-        </div> 
+            <div>
+                <a href="/auth/google">
+                    <i class="fa-brands fa-google"></i>
+                </a>
+            </div>
+        </div>
         </div>
 
         <!-- REGISTER -->

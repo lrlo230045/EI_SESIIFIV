@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TallerController;
 use App\Http\Controllers\InscripcionController;
+use App\Http\Controllers\SocialAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,6 +13,15 @@ use App\Http\Controllers\InscripcionController;
 |--------------------------------------------------------------------------
 */
 
+/*-----------------------------------social---------------------------------------*/
+
+/*----------------------------------------------------------------------------------*/
+Route::get('/auth/{provider}', [SocialAuthController::class, 'redirect']);
+Route::get('/auth/{provider}/callback', [SocialAuthController::class, 'callback']);
+/*--------------------------------------------------------------------------*/
+
+
+/*--------------------------------------------------------------------------*/
 Route::get('/', function () {
     return redirect('/auth');
 });
@@ -79,7 +89,7 @@ Route::middleware(['auth','active'])->group(function () {
         Route::get('/users/edit/{id}', [UserController::class, 'edit'])->name('users.edit');
         Route::post('/users/update/{id}', [UserController::class, 'update'])->name('users.update');
 
-        Route::get('/users/delete/{id}', [UserController::class, 'destroy'])->name('users.delete');
+        Route::post('/users/delete/{id}', [UserController::class, 'destroy'])->name('users.delete');
 
         // ================================
         // CRUD TALLERES

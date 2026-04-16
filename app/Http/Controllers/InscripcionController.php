@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Taller;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\InscripcionTallerMail;
+
 
 class InscripcionController extends Controller
 {
@@ -23,7 +26,9 @@ class InscripcionController extends Controller
 
         //  inscribir
         $user->talleres()->attach($id);
-
+        Mail::to($user->email)->send(
+            new InscripcionTallerMail($taller, $user)
+        );
         return back()->with('success', 'Inscripción exitosa');
     }
 

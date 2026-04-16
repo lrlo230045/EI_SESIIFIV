@@ -11,6 +11,10 @@
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
 
+@if(session('error'))
+    <div class="alert alert-danger">{{ session('error') }}</div>
+@endif
+
 <div class="card shadow">
     <div class="card-body">
 
@@ -27,6 +31,11 @@
 
             <tbody>
             @foreach($users as $user)
+
+                @php
+                    $esElMismo = auth()->id() == $user->id;
+                @endphp
+
                 <tr>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
@@ -44,13 +53,30 @@
                     </td>
 
                     <td>
-                        <a href="{{ route('users.edit',$user->id) }}" class="btn btn-sm btn-warning">Editar</a>
 
-                        <a href="{{ route('users.delete',$user->id) }}"
-                           class="btn btn-sm btn-danger"
-                           onclick="return confirm('¿Eliminar usuario?')">
-                           Eliminar
-                        </a>
+                        @if(!$esElMismo)
+                            <!-- EDITAR -->
+                            <a href="{{ route('users.edit',$user->id) }}"
+                               class="btn btn-sm btn-warning">
+                               Editar
+                            </a>
+
+                            <!-- ELIMINAR  -->
+                            <form method="POST"
+                                  action="{{ route('users.delete',$user->id) }}"
+                                  style="display:inline;">
+                                @csrf
+                                <button class="btn btn-sm btn-danger"
+                                    onclick="return confirm('¿Eliminar usuario?')">
+                                    Eliminar
+                                </button>
+                            </form>
+                        @else
+                            <span class="text-muted small">
+                                No puedes modificarte
+                            </span>
+                        @endif
+
                     </td>
                 </tr>
             @endforeach

@@ -31,10 +31,16 @@
             box-shadow:0 20px 40px rgba(0,0,0,0.15);
         }
 
-        /* LEFT SIDE */
         .left{
             width:50%;
             padding:60px;
+            position:relative;
+        }
+
+        .right{
+            width:50%;
+            background:url('{{ asset("images/login.jpg") }}') right/cover no-repeat;
+            background-position: 75% 100%;
         }
 
         .logo{
@@ -43,7 +49,7 @@
         }
 
         .logo img{
-            width:70px;
+            width:150px;
         }
 
         h2{
@@ -51,14 +57,6 @@
             margin:10px 0;
         }
 
-        .subtitle{
-            text-align:center;
-            font-size:14px;
-            color:#777;
-            margin-bottom:30px;
-        }
-
-        /* SWITCH BUTTONS */
         .switch{
             background:#e9ecef;
             border-radius:30px;
@@ -82,7 +80,6 @@
             border-radius:30px;
         }
 
-        /* INPUTS */
         .input-group{
             display:flex;
             align-items:center;
@@ -104,7 +101,6 @@
             width:100%;
         }
 
-        /* BUTTON */
         .btn{
             width:100%;
             padding:12px;
@@ -152,32 +148,75 @@
             align-items:center;
             background:#f2f2f2;
             cursor:pointer;
-            font-weight:bold;
-        }
-        .logo img{
-        width:150px;
-        }
-
-        /* pocionamiento de la imagen de la derecha  */
-        .right{
-            width:50%;
-            background:url('{{ asset("images/login.jpg") }}') right/cover no-repeat;
-            background-position: 75% 100%; /* 75% horizontal = derecha, 100% vertical = medio */
         }
 
         .hidden{
             display:none;
         }
+
+        .custom-alert{
+            width:100%;
+            padding:10px 35px 10px 10px;
+            border-radius:10px;
+            margin-bottom:15px;
+            font-size:13px;
+            text-align:center;
+            font-weight:500;
+            position:relative;
+        }
+
+        .custom-alert.success{
+            background:#d1e7dd;
+            color:#0f5132;
+            border:1px solid #badbcc;
+        }
+
+        .custom-alert.error{
+            background:#f8d7da;
+            color:#842029;
+            border:1px solid #f5c2c7;
+        }
+
+        .close-alert{
+            position:absolute;
+            right:10px;
+            top:50%;
+            transform:translateY(-50%);
+            cursor:pointer;
+            font-weight:bold;
+            font-size:18px;
+            opacity:0.6;
+        }
+
+        .close-alert:hover{
+            opacity:1;
+        }
+
     </style>
 </head>
+
 <body>
 
 <div class="container">
 
     <div class="left">
-        
+
+        @if(session()->has('success'))
+            <div class="custom-alert success">
+                {{ session('success') }}
+                <span class="close-alert" onclick="this.parentElement.remove()">×</span>
+            </div>
+        @endif
+
+        @if(session()->has('error'))
+            <div class="custom-alert error">
+                {{ session('error') }}
+                <span class="close-alert" onclick="this.parentElement.remove()">×</span>
+            </div>
+        @endif
+
         <div class="logo">
-        <img src="{{ asset('images/logo_siffiv.png') }}" alt="Logo">
+            <img src="{{ asset('images/logo_siffiv.png') }}" alt="Logo">
         </div>
 
         <h2>BIENVENIDO</h2>
@@ -204,17 +243,18 @@
 
                 <button type="submit" class="btn">Continue</button>
             </form>
-             <div class="divider">
-            <span>O inicia con</span>
-        </div>
 
-        <div class="social">
-            <div>
-                <a href="/auth/google">
-                    <i class="fa-brands fa-google"></i>
-                </a>
+            <div class="divider">
+                <span>O inicia con</span>
             </div>
-        </div>
+
+            <div class="social">
+                <div>
+                    <a href="/auth/google">
+                        <i class="fa-brands fa-google"></i>
+                    </a>
+                </div>
+            </div>
         </div>
 
         <!-- REGISTER -->
@@ -245,6 +285,7 @@
                 <button type="submit" class="btn">Registrarse</button>
             </form>
         </div>
+
     </div>
 
     <div class="right"></div>
@@ -265,6 +306,15 @@ function showRegister(){
     document.getElementById('btnLogin').classList.remove('active');
     document.getElementById('btnRegister').classList.add('active');
 }
+
+/* OCULTAR ALERTAS */
+setTimeout(() => {
+    document.querySelectorAll('.custom-alert').forEach(el => {
+        el.style.transition = "opacity 0.5s ease";
+        el.style.opacity = "0";
+        setTimeout(() => el.remove(), 500);
+    });
+}, 3000);
 </script>
 
 </body>

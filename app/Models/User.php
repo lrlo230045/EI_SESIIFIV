@@ -6,6 +6,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Actividad;
+
+
 
 class User extends Authenticatable
 {
@@ -30,6 +33,11 @@ class User extends Authenticatable
     public function talleres()
 {
     return $this->belongsToMany(\App\Models\Taller::class, 'inscripciones');
+}
+
+public function actividades()
+{
+    return $this->belongsToMany(Actividad::class, 'inscripciones_actividades');
 }
     /**
      * The attributes that should be hidden for serialization.

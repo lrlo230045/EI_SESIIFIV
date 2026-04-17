@@ -39,6 +39,7 @@ class AuthController extends Controller
         'name' => 'required',
         'email' => 'required|email|unique:users',
         'password' => 'required|confirmed|min:6',
+        
     ]);
 
     User::create([
@@ -52,6 +53,7 @@ class AuthController extends Controller
     ]);
 
     return redirect()->back()->with('success', 'Registro exitoso');
+    return redirect()->back()->with('error', 'Datos incorrectos error al registrar');
 }
 
     public function logout(Request $request)

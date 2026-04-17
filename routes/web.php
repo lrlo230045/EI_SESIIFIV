@@ -1,27 +1,28 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TallerController;
 use App\Http\Controllers\InscripcionController;
+use App\Http\Controllers\InscripcionActividadController;
+use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\SocialAuthController;
 
 /*
 |--------------------------------------------------------------------------
-| Rutas públicas
+| LOGIN SOCIAL
 |--------------------------------------------------------------------------
 */
-
-/*-----------------------------------social---------------------------------------*/
-
-/*----------------------------------------------------------------------------------*/
 Route::get('/auth/{provider}', [SocialAuthController::class, 'redirect']);
 Route::get('/auth/{provider}/callback', [SocialAuthController::class, 'callback']);
-/*--------------------------------------------------------------------------*/
 
-
-/*--------------------------------------------------------------------------*/
+/*
+|--------------------------------------------------------------------------
+| RUTAS PÚBLICAS
+|--------------------------------------------------------------------------
+*/
 Route::get('/', function () {
     return redirect('/auth');
 });
@@ -34,20 +35,26 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 /*
 |--------------------------------------------------------------------------
-| Rutas protegidas (usuarios autenticados y activos)
+| RUTAS PROTEGIDAS
 |--------------------------------------------------------------------------
 */
-
 Route::middleware(['auth','active'])->group(function () {
 
+    // ================================
     // DASHBOARD
+    // ================================
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
 
     // ================================
-    // INSCRIPCIONES
+    // TALLERES (USUARIO)
     // ================================
+    Route::get('/talleres-disponibles', [TallerController::class, 'userView'])
+        ->name('talleres.user');
+
+    Route::get('/mis-talleres', [TallerController::class, 'misTalleres'])
+        ->name('talleres.mis');
 
     Route::post('/inscribirse/{id}', [InscripcionController::class, 'inscribirse'])
         ->name('inscribirse');
@@ -56,31 +63,34 @@ Route::middleware(['auth','active'])->group(function () {
         ->name('cancelar');
 
     // ================================
-    // VISTAS USUARIO
+    // ACTIVIDADES (USUARIO)
     // ================================
+    Route::get('/actividades-disponibles', [ActividadController::class,'disponibles'])
+        ->name('actividades.disponibles');
 
-    Route::get('/talleres-disponibles', [TallerController::class, 'userView'])
-        ->name('talleres.user');
+    Route::get('/mis-actividades', [ActividadController::class,'mis'])
+        ->name('actividades.mis');
 
-    Route::get('/mis-talleres', [TallerController::class, 'misTalleres'])
-        ->name('talleres.mis');
+    Route::post('/actividades/inscribirse/{id}', [InscripcionActividadController::class,'inscribirse'])
+        ->name('actividades.inscribirse');
+
+    Route::post('/actividades/cancelar/{id}', [InscripcionActividadController::class,'cancelar'])
+        ->name('actividades.cancelar');
 
     /*
     |--------------------------------------------------------------------------
-    | Rutas SOLO ADMIN
+    | SOLO ADMIN
     |--------------------------------------------------------------------------
     */
-
     Route::middleware('admin')->group(function () {
 
         Route::get('/admin', function () {
-            return view('dashboard'); // puedes cambiarlo luego
+            return view('dashboard');
         });
 
         // ================================
         // CRUD USUARIOS
         // ================================
-
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
 
         Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
@@ -94,7 +104,6 @@ Route::middleware(['auth','active'])->group(function () {
         // ================================
         // CRUD TALLERES
         // ================================
-
         Route::get('/talleres', [TallerController::class,'index'])->name('talleres.index');
 
         Route::get('/talleres/create', [TallerController::class,'create'])->name('talleres.create');
@@ -104,6 +113,19 @@ Route::middleware(['auth','active'])->group(function () {
         Route::post('/talleres/update/{id}', [TallerController::class,'update'])->name('talleres.update');
 
         Route::get('/talleres/delete/{id}', [TallerController::class,'destroy'])->name('talleres.delete');
+
+        // ================================
+        // CRUD ACTIVIDADES
+        // ================================
+        Route::get('/actividades', [ActividadController::class,'index'])->name('actividades.index');
+
+        Route::get('/actividades/create', [ActividadController::class,'create'])->name('actividades.create');
+        Route::post('/actividades/store', [ActividadController::class,'store'])->name('actividades.store');
+
+        Route::get('/actividades/edit/{id}', [ActividadController::class,'edit'])->name('actividades.edit');
+        Route::post('/actividades/update/{id}', [ActividadController::class,'update'])->name('actividades.update');
+
+        Route::get('/actividades/delete/{id}', [ActividadController::class,'destroy'])->name('actividades.delete');
 
     });
 
